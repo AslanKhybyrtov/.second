@@ -55,7 +55,7 @@ class ria_parser(Thread):
             #     main_text += texts
             main_text = ''.join(list(map(lambda a: a.text, text)))
             
-
+ 
             
             self.result.append(
                 (url,
