@@ -1,0 +1,10 @@
+Lib
+Include
+__pycache__
+Scripts
+pyvenv.cfg
+logs.log
+pars_all_2.py
+pars_all_news.py
+pars.py
+test.py
