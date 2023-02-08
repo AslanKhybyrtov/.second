@@ -9,6 +9,7 @@ import csv
 from log import *
 import os
 from threading import Thread
+from config.settings import *
 ParseResult = collections.namedtuple(
     'ParseResult', ('text', 'time', 'url'),
 )
