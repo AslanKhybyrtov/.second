@@ -38,11 +38,16 @@ class lenta_parser(Thread):
         self.driver.find_element(By.XPATH, "//div[3]/div[3]/div[2]/header/div[3]/div[2]/div/button").click()
         time.sleep(5)
         #WebDriverWait(self.driver,timeout=15).until(EC.element_to_be_clickable((By.XPATH, '//input[@type="password"]')))
-        email_input = self.driver.find_element(By.XPATH, '//input[@type="email"]')
+        email_input = self.driver.find_element(By.XPATH, '//*[@id="login"]')
+        time.sleep(5)
         email_input.send_keys(config['Lenta']['login'])
+        time.sleep(5)
         password_input = self.driver.find_element(By.XPATH, '//input[@type="password"]')
+        time.sleep(5)
         password_input.send_keys(config['Lenta']['password'])
+        time.sleep(5)
         self.driver.find_element(By.XPATH, "//div/div/div[2]/div/div/div/div[1]/form/button").click()
+        time.sleep(5)
 
     def parse_page(self):
         news = self.driver.find_elements(By.XPATH,"//section[1]/div[1]/div[1]/div/a") 
