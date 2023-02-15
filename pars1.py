@@ -9,7 +9,10 @@ import csv
 from log import *
 import os
 from threading import Thread
-from config.settings import *
+from config.con_ import *
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 ParseResult = collections.namedtuple(
     'ParseResult', ('text', 'time', 'url'),
 )
@@ -25,10 +28,21 @@ class lenta_parser(Thread):
         self.driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),chrome_options=options)
         self.database = []
         self.result =[]
+        self.wait= WebDriverWait(self.driver,timeout=15)
 
     def load_page(self):#, page: int = None):
         url = "https://lenta.ru/"
         self.driver.get(url=url)
+
+    def authorization(self):
+        self.driver.find_element(By.XPATH, "//div[3]/div[3]/div[2]/header/div[3]/div[2]/div/button").click()
+        time.sleep(5)
+        #WebDriverWait(self.driver,timeout=15).until(EC.element_to_be_clickable((By.XPATH, '//input[@type="password"]')))
+        email_input = self.driver.find_element(By.XPATH, '//input[@type="email"]')
+        email_input.send_keys(config['Lenta']['login'])
+        password_input = self.driver.find_element(By.XPATH, '//input[@type="password"]')
+        password_input.send_keys(config['Lenta']['password'])
+        self.driver.find_element(By.XPATH, "//div/div/div[2]/div/div/div/div[1]/form/button").click()
 
     def parse_page(self):
         news = self.driver.find_elements(By.XPATH,"//section[1]/div[1]/div[1]/div/a") 
@@ -80,8 +94,9 @@ class lenta_parser(Thread):
 
     def run(self):
         self.load_page()
-        self.parse_page()
-        self.save_result()
+        self.authorization()
+        # self.parse_page()
+        # self.save_result()
         self.driver.quit()
 
 if __name__ == "__main__":

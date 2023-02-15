@@ -9,7 +9,9 @@ import csv
 from log import *
 import os
 from threading import Thread
-from config.settings import *
+from config.con_ import *
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 ParseResult = collections.namedtuple(
     'ParseResult', ('text', 'time', 'url'),
 )
@@ -25,10 +27,27 @@ class ria_parser(Thread):
         self.driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),chrome_options=options)
         self.database = []
         self.result =[]
+        self.wait= WebDriverWait(self.driver,timeout=15)
 
     def load_page(self):#, page: int = None):
         url = "https://ria.ru/"
         self.driver.get(url=url)
+
+    def authorization(self):
+        self.driver.find_element(By.XPATH, "//div[2]/div[1]/div[1]/div[3]/a[1]").click()
+        time.sleep(5)
+        email_input = self.driver.find_element(By.XPATH, '//*[@id="modalAuthEmailField"]')
+        time.sleep(5)
+        email_input.send_keys(config['Ria']['login'])
+        time.sleep(5)
+        password_input = self.driver.find_element(By.XPATH, '//*[@id="modalAuthPassword"]')
+        time.sleep(5)
+        password_input.send_keys(config['Ria']['password'])
+        time.sleep(5)
+        self.driver.find_element(By.XPATH, '//*[@id="modalAuthSubmit"]/button').click()
+        time.sleep(10)
+
+    
 
     def parse_page(self):
         news1 = self.driver.find_elements(By.XPATH,"//div[@data-article-type='article']/a[1]") # первые 12 новостей 1 блок
@@ -83,8 +102,9 @@ class ria_parser(Thread):
 
     def run(self):
         self.load_page()
-        self.parse_page()
-        self.save_result()
+        self.authorization()
+        # self.parse_page()
+        # self.save_result()
         self.driver.quit()
 
 if __name__ == "__main__":
