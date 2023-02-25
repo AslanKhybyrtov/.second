@@ -1,17 +1,6 @@
-import selenium
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-import traceback
-import time
-from selenium.webdriver.common.by import By
-import collections
-import csv
 from log import *
-import os
-from threading import Thread
 from config.con_ import *
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+
 ParseResult = collections.namedtuple(
     'ParseResult', ('text', 'time', 'url'),
 )
@@ -19,15 +8,42 @@ ParseResult = collections.namedtuple(
 
 class ria_parser(Thread):
 
-    def  __init__(self) -> None:
+    def  __init__(self, id) -> None:
         Thread.__init__(self)
-        options = webdriver.ChromeOptions()
-        options.add_argument('window-size = 1600,900')
-        #options.add_argument('--headless')
-        self.driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),chrome_options=options)
         self.database = []
         self.result =[]
-        self.wait= WebDriverWait(self.driver,timeout=15)
+        self.browsers_total(id)
+
+    def browsers_total(self, id, invisable = False):
+        import platform
+        bit,plat = platform.architecture()
+        system = (bit[:2],plat[:3].lower())
+        match system:
+            case "64","win":
+                chrome_drive_path = Service('chromedriver-win-x64.exe')
+            case "86","win":  
+                chrome_drive_path = Service('chromedriver-win-x86.exe')
+            case bit,"elf":
+                # линукс
+                chrome_drive_path = Service('./chromedriver-linux')
+            case "64", "mac":
+                chrome_drive_path = Service('./chromedriver-mac-x64')
+                #mac
+            case _:
+                chrome_drive_path = Service('./chromedriver-mac-arm')
+                # arm
+        options = webdriver.ChromeOptions()
+        reg_url = f'http://localhost:3001/v1.0/browser_profiles/{id}/start?automation=1'
+        respone = requests.get(reg_url)
+        respons_json = respone.json()
+        PORT = str(respons_json['automation']['port'])
+        options.debugger_address = '127.0.0.1:' + PORT
+        options.add_argument('window-size = 1600,900')
+        options.add_argument('--disable-logging')
+        options.add_argument('--ignore-error')
+        if invisable:
+            options.add_argument('--headless')
+        self.driver = webdriver.Chrome(service=chrome_drive_path,chrome_options=options)
 
     def load_page(self):#, page: int = None):
         url = "https://ria.ru/"
@@ -35,17 +51,21 @@ class ria_parser(Thread):
 
     def authorization(self):
         self.driver.find_element(By.XPATH, "//div[2]/div[1]/div[1]/div[3]/a[1]").click()
-        time.sleep(5)
-        email_input = self.driver.find_element(By.XPATH, '//*[@id="modalAuthEmailField"]')
-        time.sleep(5)
-        email_input.send_keys(config['Ria']['login'])
-        time.sleep(5)
-        password_input = self.driver.find_element(By.XPATH, '//*[@id="modalAuthPassword"]')
-        time.sleep(5)
-        password_input.send_keys(config['Ria']['password'])
-        time.sleep(5)
-        self.driver.find_element(By.XPATH, '//*[@id="modalAuthSubmit"]/button').click()
-        time.sleep(10)
+        try:
+            time.sleep(3)
+            email_input = self.driver.find_element(By.XPATH, '//*[@id="modalAuthEmailField"]')
+            email_input.send_keys(config['Ria']['login'])
+            password_input = self.driver.find_element(By.XPATH, '//*[@id="modalAuthPassword"]')
+            password_input.send_keys(config['Ria']['password'])
+            WebDriverWait(self.driver,timeout=15).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="modalAuthSubmit"]/button')))
+            self.driver.find_element(By.XPATH, '//*[@id="modalAuthSubmit"]/button').click()
+            time.sleep(3)
+        except exceptions.NoSuchElementException:
+            print("Уже авторизован")
+            self.driver.get("https://ria.ru/")
+        except:
+            logging.error(traceback.format_exc())
+
 
     
 
@@ -108,5 +128,5 @@ class ria_parser(Thread):
         self.driver.quit()
 
 if __name__ == "__main__":
-    parser = ria_parser()
+    parser = ria_parser(57084048)
     parser.run()
