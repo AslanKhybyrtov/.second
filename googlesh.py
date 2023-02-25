@@ -249,14 +249,7 @@ class google_sheet():
             
         results = self.__service.spreadsheets().get(spreadsheetId = spreadsheetId, 
                                         ranges = ranges, includeGridData = True).execute()
-        print('Основные данные')
-        print(results['properties'])
-        print('\nЗначения и раскраска')
-        print(results['sheets'][0]['data'][0]['rowData'] )
-        print('\nВысота ячейки')
-        print(results['sheets'][0]['data'][0]['rowMetadata'])
-        print('\nШирина ячейки')
-        print(results['sheets'][0]['data'][0]['columnMetadata'])
+
 
     def result_list2(self,spreadsheetId):
     ##### =================>Это отдельная функция
@@ -267,6 +260,6 @@ class google_sheet():
                                                 valueRenderOption = 'FORMATTED_VALUE',  
                                                 dateTimeRenderOption = 'FORMATTED_STRING').execute() 
         sheet_values = results['valueRanges'][0]['values']
-        print(sheet_values)
+
 
 
