@@ -70,7 +70,7 @@ class google_sheet():
                     ]}
         ]
         }).execute()
-
+##### =================>Это отдельная функция
     results = self.__service.spreadsheets().batchUpdate(spreadsheetId = spreadsheetId, body = {
   "requests": [
 
@@ -123,7 +123,9 @@ class google_sheet():
     }
     ]
     }).execute()
-
+    
+    
+##### =================>Это отдельная функция
     # Рисуем рамку
     results = self.__service.spreadsheets().batchUpdate(
     spreadsheetId = spreadsheetId,
@@ -169,6 +171,7 @@ class google_sheet():
     }).execute()
 
     # Объединяем ячейки A2:D1
+##### =================>Это отдельная функция
     results = self.__service.spreadsheets().batchUpdate(
     spreadsheetId = spreadsheetId,
     body = {
@@ -181,6 +184,8 @@ class google_sheet():
                 'mergeType': 'MERGE_ALL'}}
         ]
     }).execute()
+
+##### =================>Это отдельная функция
 # Добавляем заголовок таблицы
     results = self.__service.spreadsheets().values().batchUpdate(spreadsheetId = spreadsheetId, body = {
     "valueInputOption": "USER_ENTERED",
@@ -193,6 +198,8 @@ class google_sheet():
     ]
     }).execute()
 
+    
+##### =================>Это отдельная функция
     # Установка формата ячеек
     results = self.__service.spreadsheets().batchUpdate(
     spreadsheetId = spreadsheetId,
@@ -235,6 +242,7 @@ class google_sheet():
   ]
     }).execute()
 
+##### =================>Это отдельная функция
     ranges = ["Лист номер один!C2:C2"] # 
           
     results = self.__service.spreadsheets().get(spreadsheetId = spreadsheetId, 
@@ -248,6 +256,7 @@ class google_sheet():
     print('\nШирина ячейки')
     print(results['sheets'][0]['data'][0]['columnMetadata'])
 
+ ##### =================>Это отдельная функция
     ranges = ["Лист номер один!A2:F8"] # 
             
     results = self.__service.spreadsheets().values().batchGet(spreadsheetId = spreadsheetId, 
