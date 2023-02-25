@@ -71,201 +71,202 @@ class google_sheet():
         ]
         }).execute()
 ##### =================>Это отдельная функция
-    results = self.__service.spreadsheets().batchUpdate(spreadsheetId = spreadsheetId, body = {
-  "requests": [
+    def colomn(self,spreadsheetId,sheetId):
+        results = self.__service.spreadsheets().batchUpdate(spreadsheetId = spreadsheetId, body = {
+            "requests": [
+                    # Задать ширину столбца A: 20 пикселей
+                    {
+                    "updateDimensionProperties": {
+                        "range": {
+                        "sheetId": sheetId,
+                        "dimension": "COLUMNS",  # Задаем ширину колонки
+                        "startIndex": 0, # Нумерация начинается с нуля
+                        "endIndex": 1 # Со столбца номер startIndex по endIndex - 1 (endIndex не входит!)
+                        },
+                        "properties": {
+                        "pixelSize": 20 # Ширина в пикселях
+                        },
+                        "fields": "pixelSize" # Указываем, что нужно использовать параметр pixelSize  
+                    }
+                    },
 
-    # Задать ширину столбца A: 20 пикселей
-    {
-      "updateDimensionProperties": {
-        "range": {
-          "sheetId": sheetId,
-          "dimension": "COLUMNS",  # Задаем ширину колонки
-          "startIndex": 0, # Нумерация начинается с нуля
-          "endIndex": 1 # Со столбца номер startIndex по endIndex - 1 (endIndex не входит!)
-        },
-        "properties": {
-          "pixelSize": 20 # Ширина в пикселях
-        },
-        "fields": "pixelSize" # Указываем, что нужно использовать параметр pixelSize  
-      }
-    },
+                    # Задать ширину столбцов B и C: 150 пикселей
+                    {
+                    "updateDimensionProperties": {
+                        "range": {
+                        "sheetId": sheetId,
+                        "dimension": "COLUMNS",
+                        "startIndex": 1,
+                        "endIndex": 3
+                        },
+                        "properties": {
+                        "pixelSize": 150
+                        },
+                        "fields": "pixelSize"
+                    }
+                    },
 
-    # Задать ширину столбцов B и C: 150 пикселей
-    {
-      "updateDimensionProperties": {
-        "range": {
-          "sheetId": sheetId,
-          "dimension": "COLUMNS",
-          "startIndex": 1,
-          "endIndex": 3
-        },
-        "properties": {
-          "pixelSize": 150
-        },
-        "fields": "pixelSize"
-      }
-    },
-
-    # Задать ширину столбца D: 200 пикселей
-    {
-      "updateDimensionProperties": {
-        "range": {
-          "sheetId": sheetId,
-          "dimension": "COLUMNS",
-          "startIndex": 3,
-          "endIndex": 4
-        },
-        "properties": {
-          "pixelSize": 200
-        },
-        "fields": "pixelSize"
-      }
-    }
-    ]
-    }).execute()
+                # Задать ширину столбца D: 200 пикселей
+                {
+                "updateDimensionProperties": {
+                    "range": {
+                    "sheetId": sheetId,
+                    "dimension": "COLUMNS",
+                    "startIndex": 3,
+                    "endIndex": 4
+                    },
+                    "properties": {
+                    "pixelSize": 200
+                    },
+                    "fields": "pixelSize"
+                }
+                }
+                ]
+                }).execute()
     
-    
+    def frame(self,spreadsheetId,sheetId):
 ##### =================>Это отдельная функция
     # Рисуем рамку
-    results = self.__service.spreadsheets().batchUpdate(
-    spreadsheetId = spreadsheetId,
-    body = {
-        "requests": [
-            {'updateBorders': {'range': {'sheetId': sheetId,
-                             'startRowIndex': 1,
-                             'endRowIndex': 3,
-                             'startColumnIndex': 1,
-                             'endColumnIndex': 4},
-                   'bottom': {  
-                   # Задаем стиль для верхней границы
-                              'style': 'SOLID', # Сплошная линия
-                              'width': 1,       # Шириной 1 пиксель
-                              'color': {'red': 0, 'green': 0, 'blue': 0, 'alpha': 1}}, # Черный цвет
-                   'top': { 
-                   # Задаем стиль для нижней границы
-                              'style': 'SOLID',
-                              'width': 1,
-                              'color': {'red': 0, 'green': 0, 'blue': 0, 'alpha': 1}},
-                   'left': { # Задаем стиль для левой границы
-                              'style': 'SOLID',
-                              'width': 1,
-                              'color': {'red': 0, 'green': 0, 'blue': 0, 'alpha': 1}},
-                   'right': { 
-                   # Задаем стиль для правой границы
-                              'style': 'SOLID',
-                              'width': 1,
-                              'color': {'red': 0, 'green': 0, 'blue': 0, 'alpha': 1}},
-                   'innerHorizontal': { 
-                   # Задаем стиль для внутренних горизонтальных линий
-                              'style': 'SOLID',
-                              'width': 1,
-                              'color': {'red': 0, 'green': 0, 'blue': 0, 'alpha': 1}},
-                   'innerVertical': { 
-                   # Задаем стиль для внутренних вертикальных линий
-                              'style': 'SOLID',
-                              'width': 1,
-                              'color': {'red': 0, 'green': 0, 'blue': 0, 'alpha': 1}}
-                              
-                              }}
+        results = self.__service.spreadsheets().batchUpdate(
+        spreadsheetId = spreadsheetId,
+        body = {
+            "requests": [
+                {'updateBorders': {'range': {'sheetId': sheetId,
+                                'startRowIndex': 1,
+                                'endRowIndex': 3,
+                                'startColumnIndex': 1,
+                                'endColumnIndex': 4},
+                    'bottom': {  
+                    # Задаем стиль для верхней границы
+                                'style': 'SOLID', # Сплошная линия
+                                'width': 1,       # Шириной 1 пиксель
+                                'color': {'red': 0, 'green': 0, 'blue': 0, 'alpha': 1}}, # Черный цвет
+                    'top': { 
+                    # Задаем стиль для нижней границы
+                                'style': 'SOLID',
+                                'width': 1,
+                                'color': {'red': 0, 'green': 0, 'blue': 0, 'alpha': 1}},
+                    'left': { # Задаем стиль для левой границы
+                                'style': 'SOLID',
+                                'width': 1,
+                                'color': {'red': 0, 'green': 0, 'blue': 0, 'alpha': 1}},
+                    'right': { 
+                    # Задаем стиль для правой границы
+                                'style': 'SOLID',
+                                'width': 1,
+                                'color': {'red': 0, 'green': 0, 'blue': 0, 'alpha': 1}},
+                    'innerHorizontal': { 
+                    # Задаем стиль для внутренних горизонтальных линий
+                                'style': 'SOLID',
+                                'width': 1,
+                                'color': {'red': 0, 'green': 0, 'blue': 0, 'alpha': 1}},
+                    'innerVertical': { 
+                    # Задаем стиль для внутренних вертикальных линий
+                                'style': 'SOLID',
+                                'width': 1,
+                                'color': {'red': 0, 'green': 0, 'blue': 0, 'alpha': 1}}
+                                
+                                }}
+            ]
+        }).execute()
+
+    def cell(self,spreadsheetId,sheetId):
+        # Объединяем ячейки A2:D1
+    ##### =================>Это отдельная функция
+        results = self.__service.spreadsheets().batchUpdate(
+        spreadsheetId = spreadsheetId,
+        body = {
+            "requests": [
+                {'mergeCells': {'range': {'sheetId': sheetId,
+                            'startRowIndex': 0,
+                            'endRowIndex': 1,
+                            'startColumnIndex': 1,
+                            'endColumnIndex': 4},
+                    'mergeType': 'MERGE_ALL'}}
+            ]
+        }).execute()
+
+    def header(self,spreadsheetId,sheetId):
+    ##### =================>Это отдельная функция
+    # Добавляем заголовок таблицы
+        results = self.__service.spreadsheets().values().batchUpdate(spreadsheetId = spreadsheetId, body = {
+        "valueInputOption": "USER_ENTERED",
+    # Данные воспринимаются, как вводимые пользователем (считается значение формул)
+        "data": [
+            {"range": "Лист номер один!B1",
+            "majorDimension": "ROWS", # Сначала заполнять строки, затем столбцы
+            "values": [["Заголовок таблицы" ] 
+                    ]}
         ]
-    }).execute()
+        }).execute()
 
-    # Объединяем ячейки A2:D1
-##### =================>Это отдельная функция
-    results = self.__service.spreadsheets().batchUpdate(
-    spreadsheetId = spreadsheetId,
-    body = {
-        "requests": [
-            {'mergeCells': {'range': {'sheetId': sheetId,
-                          'startRowIndex': 0,
-                          'endRowIndex': 1,
-                          'startColumnIndex': 1,
-                          'endColumnIndex': 4},
-                'mergeType': 'MERGE_ALL'}}
-        ]
-    }).execute()
-
-##### =================>Это отдельная функция
-# Добавляем заголовок таблицы
-    results = self.__service.spreadsheets().values().batchUpdate(spreadsheetId = spreadsheetId, body = {
-    "valueInputOption": "USER_ENTERED",
-# Данные воспринимаются, как вводимые пользователем (считается значение формул)
-    "data": [
-        {"range": "Лист номер один!B1",
-         "majorDimension": "ROWS", # Сначала заполнять строки, затем столбцы
-         "values": [["Заголовок таблицы" ] 
-                   ]}
-    ]
-    }).execute()
-
-    
-##### =================>Это отдельная функция
-    # Установка формата ячеек
-    results = self.__service.spreadsheets().batchUpdate(
-    spreadsheetId = spreadsheetId,
-    body = 
-{
-  "requests": 
-  [
+    def format_cell(self,spreadsheetId,sheetId):
+    ##### =================>Это отдельная функция
+        # Установка формата ячеек
+        results = self.__service.spreadsheets().batchUpdate(
+        spreadsheetId = spreadsheetId,
+        body = 
     {
-      "repeatCell": 
-      {
-        "cell": 
+    "requests": [
         {
-          "userEnteredFormat": 
-          {
-            "horizontalAlignment": 'CENTER',
-            "backgroundColor": {
-                "red": 0.8,
-                "green": 0.8,
-                "blue": 0.8,
-                "alpha": 1
+        "repeatCell": 
+        {
+            "cell": 
+            {
+            "userEnteredFormat": 
+            {
+                "horizontalAlignment": 'CENTER',
+                "backgroundColor": {
+                    "red": 0.8,
+                    "green": 0.8,
+                    "blue": 0.8,
+                    "alpha": 1
+                },
+                "textFormat":
+                {
+                "bold": True,
+                "fontSize": 14
+                }
+            }
             },
-            "textFormat":
-             {
-               "bold": True,
-               "fontSize": 14
-             }
-          }
-        },
-        "range": 
-        {
-          "sheetId": sheetId,
-          "startRowIndex": 1,
-          "endRowIndex": 2,
-          "startColumnIndex": 1,
-          "endColumnIndex": 4
-        },
-        "fields": "userEnteredFormat"
-      }
-    }
-  ]
-    }).execute()
+            "range": 
+            {
+            "sheetId": sheetId,
+            "startRowIndex": 1,
+            "endRowIndex": 2,
+            "startColumnIndex": 1,
+            "endColumnIndex": 4
+            },
+            "fields": "userEnteredFormat"
+        }
+        }
+    ]
+        }).execute()
 
-##### =================>Это отдельная функция
-    ranges = ["Лист номер один!C2:C2"] # 
-          
-    results = self.__service.spreadsheets().get(spreadsheetId = spreadsheetId, 
-                                     ranges = ranges, includeGridData = True).execute()
-    print('Основные данные')
-    print(results['properties'])
-    print('\nЗначения и раскраска')
-    print(results['sheets'][0]['data'][0]['rowData'] )
-    print('\nВысота ячейки')
-    print(results['sheets'][0]['data'][0]['rowMetadata'])
-    print('\nШирина ячейки')
-    print(results['sheets'][0]['data'][0]['columnMetadata'])
-
- ##### =================>Это отдельная функция
-    ranges = ["Лист номер один!A2:F8"] # 
+    def result_1list(self,spreadsheetId):
+    ##### =================>Это отдельная функция
+        ranges = ["Лист номер один!C2:C2"] # 
             
-    results = self.__service.spreadsheets().values().batchGet(spreadsheetId = spreadsheetId, 
-                                            ranges = ranges, 
-                                            valueRenderOption = 'FORMATTED_VALUE',  
-                                            dateTimeRenderOption = 'FORMATTED_STRING').execute() 
-    sheet_values = results['valueRanges'][0]['values']
-    print(sheet_values)
+        results = self.__service.spreadsheets().get(spreadsheetId = spreadsheetId, 
+                                        ranges = ranges, includeGridData = True).execute()
+        print('Основные данные')
+        print(results['properties'])
+        print('\nЗначения и раскраска')
+        print(results['sheets'][0]['data'][0]['rowData'] )
+        print('\nВысота ячейки')
+        print(results['sheets'][0]['data'][0]['rowMetadata'])
+        print('\nШирина ячейки')
+        print(results['sheets'][0]['data'][0]['columnMetadata'])
 
-google_sheet.run()
+    def result_list2(self,spreadsheetId):
+    ##### =================>Это отдельная функция
+        ranges = ["Лист номер один!A2:F8"] # 
+                
+        results = self.__service.spreadsheets().values().batchGet(spreadsheetId = spreadsheetId, 
+                                                ranges = ranges, 
+                                                valueRenderOption = 'FORMATTED_VALUE',  
+                                                dateTimeRenderOption = 'FORMATTED_STRING').execute() 
+        sheet_values = results['valueRanges'][0]['values']
+        print(sheet_values)
 
 
