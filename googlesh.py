@@ -25,6 +25,7 @@ class google_sheet():
             }).execute()
         spreadsheetId = spreadsheet['spreadsheetId'] # сохраняем идентификатор файла
         print('https://docs.google.com/spreadsheets/d/' + spreadsheetId)
+    
     def __create_list(self, spreadsheetId):
     
         # Добавление листа
