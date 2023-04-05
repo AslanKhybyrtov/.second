@@ -4,7 +4,9 @@ from googlesh import google_sheet
 
 
 if __name__ == "__main__":
-    a = lenta_parser()
-    b = ria_parser()
-    a.start()
-    b.start()
+    # a = lenta_parser()
+    # b = ria_parser()
+    # a.start()
+    # b.start()
+
+    pass

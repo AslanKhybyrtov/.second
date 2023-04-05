@@ -11,3 +11,5 @@ test.py
 *.ini
 chrome-axe-377911-17d1def18bbd.json
 Cache
+token.json
+credentials.json
