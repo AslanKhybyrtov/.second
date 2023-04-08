@@ -1,6 +1,7 @@
-from log import *
-from config.con_ import *
-
+# from log import *
+from config import *
+from googlesh import *
+from config.log import *
 ParseResult = collections.namedtuple(
     'ParseResult', ('text', 'time', 'url'),
 )
@@ -9,6 +10,7 @@ ParseResult = collections.namedtuple(
 class ria_parser(Thread):
 
     def  __init__(self, id) -> None:
+        self.q = google_sheet()
         Thread.__init__(self)
         self.database = []
         self.result =[]
@@ -50,8 +52,8 @@ class ria_parser(Thread):
         self.driver.get(url=url)
 
     def authorization(self):
-        self.driver.find_element(By.XPATH, "//div[2]/div[1]/div[1]/div[3]/a[1]").click()
         try:
+            self.driver.find_element(By.XPATH, "//a[@data-modal-open='authorization']").click()
             time.sleep(3)
             email_input = self.driver.find_element(By.XPATH, '//*[@id="modalAuthEmailField"]')
             email_input.send_keys(config['Ria']['login'])
@@ -85,9 +87,9 @@ class ria_parser(Thread):
         try:
             url = self.driver.current_url
             print(url)
-            time_block = self.driver.find_element(By.XPATH, "//div/div[2]/div/div[4]/div[1]/div[1]/div/div/div/div[1]/div/div[1]/div[2]/div[1]/div[1]/a").text # +
+            time_block = self.driver.find_element(By.XPATH, "//div[@class='article__info-date']/a").text # +
             print(time_block)
-            title = self.driver.find_element(By.XPATH, "//div/div[2]/div/div[4]/div[1]/div[1]/div/div/div/div[1]/div/div[1]/div[2]/div[2]").text # -
+            title = self.driver.find_element(By.XPATH, "//div[@class='article__title']").text # -
             print(title)
             text = self.driver.find_elements(By.XPATH, "//div[@data-type='text']") #[@class='Что то там'] +
             # for texts in text:
@@ -98,17 +100,18 @@ class ria_parser(Thread):
  
             
             self.result.append(
-                (url,
+                [url,
                 time_block,
                 title, 
-                main_text))
+                main_text])
             
         except Exception as e:
             logging.info(url)
             logging.error(traceback.format_exc())
 
     def save_result(self):
-        path = 'ria_save.csv'   
+        path = 'ria_save.csv' 
+        
         if os.path.exists(path):
             with open(path, 'a', encoding='utf-8') as f:
                 writer = csv.writer(f, quoting=csv.QUOTE_MINIMAL)
@@ -120,13 +123,17 @@ class ria_parser(Thread):
                 for data in self.result:
                     writer.writerow(data)
 
+        # сохранение в гугл таблицы
+        print(self.q.append_values(config["Google"]['table_id'], "Лист1",[1,100],self.result))
+        
     def run(self):
         self.load_page()
         self.authorization()
-        # self.parse_page()
-        # self.save_result()
+        self.parse_page()
+        self.save_result()
         self.driver.quit()
 
 if __name__ == "__main__":
     parser = ria_parser(57084048)
     parser.run()
+    

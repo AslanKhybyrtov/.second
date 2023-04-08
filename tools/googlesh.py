@@ -2,7 +2,7 @@
 import httplib2 
 from googleapiclient import discovery
 from oauth2client.service_account import ServiceAccountCredentials	
-from config.con_ import *
+from config import *
 class google_sheet():
 
     def __init__(self) -> None:
@@ -291,9 +291,10 @@ class google_sheet():
         body = {'values': values}
         result = self.__service.spreadsheets().values().append(
             spreadsheetId=spreadsheet_id,
-            range=f"{list_name}!A{ranges[0]}:W{ranges[1]}", 
+            range=f"{list_name}!A{ranges[0]}:L{ranges[1]}", 
             valueInputOption="USER_ENTERED", 
             body=body).execute()
+        return result
 
 if __name__ == "__main__":
     q = google_sheet()
@@ -302,6 +303,6 @@ if __name__ == "__main__":
     # q.lists_(config["Google"]['table_id'])
     # q.headers(config["Google"]['table_id'], "Лист1",[1,1], ["qw"])
     # print(q.result_list(config["Google"]['table_id'], "Лист1",[1,10]))
-    # q.append_values(config["Google"]['table_id'], "Лист1",[1,10],[["rty"],[2345]])
+    q.append_values(config["Google"]['table_id'], "Лист1",[1,10],[["rty"],[2345]])
 
 

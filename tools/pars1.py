@@ -1,5 +1,8 @@
-from log import *
-from config.con_ import *
+# from log import *
+from config import *
+from googlesh import *
+from config.log import *
+
 ParseResult = collections.namedtuple(
     'ParseResult', ('text', 'time', 'url'),
 )
@@ -8,6 +11,7 @@ ParseResult = collections.namedtuple(
 class lenta_parser(Thread):
    
     def  __init__(self, id) -> None:
+        self.q = google_sheet()
         Thread.__init__(self)
         self.database = []
         self.result =[]
@@ -111,11 +115,14 @@ class lenta_parser(Thread):
                 for data in self.result:
                     writer.writerow(data)
 
+        # сохранение в гугл таблицы
+        print(self.q.append_values(config["Google"]['table_id'], "",[1,100],self.result))
+
     def run(self):
         self.load_page()
-        self.authorization()
-        # self.parse_page()
-        # self.save_result()
+        # self.authorization()
+        self.parse_page()
+        self.save_result()
         self.driver.quit()
 
 if __name__ == "__main__":

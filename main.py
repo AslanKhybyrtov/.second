@@ -1,12 +1,14 @@
-from pars1 import lenta_parser
-from ria import ria_parser
-from googlesh import google_sheet
+# from pars1 import lenta_parser
+# from ria import ria_parser
+from .tools.pars1 import lenta_parser
+from .tools.ria import ria_parser
+
 
 
 if __name__ == "__main__":
-    # a = lenta_parser()
-    # b = ria_parser()
-    # a.start()
-    # b.start()
+    a = lenta_parser()
+    b = ria_parser()
+    a.start()
+    b.start()
 
     pass
