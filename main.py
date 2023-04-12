@@ -1,14 +1,13 @@
-# from pars1 import lenta_parser
-# from ria import ria_parser
-from .tools.pars1 import lenta_parser
-from .tools.ria import ria_parser
+from tools import *
+from config import *
 
 
 
 if __name__ == "__main__":
-    a = lenta_parser()
-    b = ria_parser()
-    a.start()
-    b.start()
+    # a = lenta_parser()
+    # b = ria_parser()
+    # a.start()
+    # b.start()
+    executor.start_polling(dp)
 
     pass
