@@ -24,8 +24,9 @@ from aiogram import Bot, Dispatcher, executor, types
 import string
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.utils.helper import Helper, HelperMode, ListItem
-
+from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.dispatcher import FSMContext
+import json
 
 config = configparser.ConfigParser()
 config.read('config/setting.ini')
@@ -38,4 +39,3 @@ def config_update():
 
 bot = Bot(config["Telegramm_bot"]["Token_Aiogram"])
 dp = Dispatcher(bot, storage=MemoryStorage())
-dp.middleware.setup(LoggingMiddleware())
