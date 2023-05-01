@@ -23,34 +23,16 @@ async def help_command(message: types.Message):
 async def autorisation_id(message: types.Message):
     user_id = message.from_user.id
     with open("data_out/users.json","r") as fl:
-        if user_id in fl:
-            json_data=json.load(fl)
-            await message.answer(text="Welcome, input next command")
-        else:
-                users_id=list(map(lambda data: data.get("id"),json_data["users"]))
-                json_data["users"].append({"id":user_id,"state":"AUTORISATION"})
-                with open("data_out/users.json", 'w') as fl:
-                    json.dump(json_data,fl)
-                    await message.answer(text="Welcome, input next command")
+        json_data=json.load(fl)
+        users_id=list(map(lambda data: data.get("id"),json_data["users"]))
+    if user_id in users_id:
+        await message.answer(text="Welcome, input next command")
+    else:
+        # json_data["users"].append({"id":user_id,"state":"AUTORISATION"})
+        # with open("data_out/users.json", 'w') as fl:
+        #     json.dump(json_data,fl)
+        #     await message.answer(text="Вы зарегестрированы. Введите следующую команду")
 
-
-# async def help_command(message: types.Message):
-#     await message.answer(text="Welcome") 
-#     await message.delete()
-#     state = dp.current_state(user=message.from_user.id)
-#     user_id = message.from_user.id
-#     auth = False
-
-#     with open("data_out/users.json", 'r') as fl:
-#         json_data=json.load(fl)
-#         users_id=list(map(lambda data: data.get("id"),json_data["users"]))
-#         print(json_data)
-#         if user_id in users_id:
-#             auth = True
-#     if not auth:
-#         json_data["users"].append({"id":user_id,"state":"AUTORISATION"})
-#         with open("data_out/users.json", 'w') as fl:
-#             json.dump(json_data,fl)
 
 
 @dp.message_handler(commands=["ria"])
@@ -68,6 +50,19 @@ async def lenta_pars(message: types.Message):
     await l.run()
     await message.answer(text="Парсинг завершен")
 
+
+async def auto():
+    with open("data_out/users.json","r") as fl:
+        starter_data = json.load(fl)
+    users = starter_data.get("users")
+    for i in users:
+        # bot.send_message(chat_id=i.get("id"),text)
+        s = dp.current_state(chat=i.get("id"))
+        match i.get("state"):
+            case "AUTORISATION":
+                s.set_state(Bot_states.AUTORISATION)
+            
+        print(i.get("id"), i.get("state"))
 
 
 
